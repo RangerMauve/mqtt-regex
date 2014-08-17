@@ -1,0 +1,24 @@
+{
+  "name": "mqtt-regex",
+  "version": "0.0.1",
+  "description": "Converts an MQTT topic with parameters into a regular expression.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RangerMauve/mqtt-regex.git"
+  },
+  "keywords": [
+    "mqtt",
+    "regex",
+    "router"
+  ],
+  "author": "RangerMauve",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RangerMauve/mqtt-regex/issues"
+  },
+  "homepage": "https://github.com/RangerMauve/mqtt-regex"
+}
