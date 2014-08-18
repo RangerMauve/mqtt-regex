@@ -58,13 +58,13 @@ The return looks like
 
 ## How params work
 
-MQTT defines two types of "wildcards", one for single section of the path (`+`), and one for zero or more secions of the path (`#`).
-This library was inspired by the syntax in the routers for Express and Sinatra, and an attempt was made to have this as simple to use.
+MQTT defines two types of "wildcards", one for matching a single section of the path (`+`), and one for zero or more sections of the path (`#`).
+This library was inspired by the syntax in the routers for Express and Sinatra, and an attempt was made to have this just as simple to use.
 
 ### Examples of topic patterns:
 
 #### user/+id/#path
-This would match paths that start with `user/`, and then extract the next section as the user id.
+This would match paths that start with `user/`, and then extract the next section as the user `id`.
 Then it would get all subsequent paths and turn them into an array for the `path` param.
 Here is some input/output that you can expect:
 
@@ -75,6 +75,6 @@ Here is some input/output that you can expect:
 #### device/#/status/+name
 Not all wildcards need to be associated with a parameter, and it could be useful to just use plain MQTT topics.
 In this example you might only care about the status of some part of a device, and are willing to ignore the rest of the path.
-Here are some exaples of what this might be used with:
+Here are some examples of what this might be used with:
 
 	device/deviceversion/deviceidhere/component/infrared/status/active: {name:active}
