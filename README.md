@@ -10,16 +10,15 @@ var mqtt_regex = require("mqtt-regex");
 
 var pattern = "chat/+id/+user/#path/text";
 
-var room_message_info = mqtt_regex(pattern);
+var room_message_info = mqtt_regex(pattern).exec;
 
 var topic = "chat/lobby/bob/text";
 
 var message_content = "Hello, World!";
 
-var match = room_message_info.regex.exec(topic);
+var params = room_message_info(topic);
 
-if(match) {
-	var params = room_message_info.getParams(match);
+if(params) {
 	chat.getRoom(params.id).sendFrom(params.user, message_content)
 }
 ```
@@ -43,8 +42,8 @@ Or you can grab `./build/build.js` for a UMD-compatible version
 ## API
 The API is super simple and should be easy to integrate with any project
 
-### mqtt_regex(topic)
-Takes an MQTT topic, and generates a RegExp object along with a function for parsing params from the result
+### mqtt_regex(topic_pattern)
+Takes an MQTT topic pattern, and generates a RegExp object along with a function for parsing params from the result. The results also have an `exec` function that does both.
 The return looks like
 ``` javascript
 {
@@ -52,6 +51,10 @@ The return looks like
 	getParams: function(results){
 		// Processes results from RegExp.prototype.exec
 		// Returns an object containing the values for each param
+	},
+	exec: function(topic){
+		// Performs regex.exec on topic
+		// If there was a match, parses parameters and returns result
 	}
 }
 ```

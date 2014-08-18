@@ -27,16 +27,28 @@ module.exports = parse;
 /**
  * Parses topic string with parameters
  * @param topic Topic string with optional params
- @ @returns {Object} Compiles a regex for matching topic strings, and generates function for getting params
+ @ @returns {Object} Compiles a regex for matching topics, getParams for getting params, and exec for doing both
  */
 function parse(topic) {
 	var tokens = tokenize(topic).map(process_token);
-
-	return {
+	var result = {
 		regex: make_regex(tokens),
-		getParams: make_pram_getter(tokens)
-	}
+		getParams: make_pram_getter(tokens),
+	};
+	result.exec = exec.bind(result);
+	return result;
 };
+
+/**
+ * Matches regex against topic, returns params if successful
+ * @param topic Topic to match
+ */
+function exec(topic) {
+	var regex = this.regex;
+	var getParams = this.getParams;
+	var match = regex.exec(topic);
+	if (match) return getParams(match);
+}
 
 // Split the topic into consumable tokens
 function tokenize(topic) {
