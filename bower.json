@@ -1,0 +1,28 @@
+{
+  "name": "mqtt-regex",
+  "main": "build/build.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/RangerMauve/mqtt-regex",
+  "authors": [
+    "RangerMauve <RangerMauve@htomail.com>"
+  ],
+  "description": "Converts an MQTT topic with parameters into a regular expression",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "mqtt",
+    "regex",
+    "router"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
