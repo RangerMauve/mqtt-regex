@@ -18,24 +18,24 @@ var tests = {
 		tests: ["foo/bar/baz", "foo/bar", "foo"]
 	},
 	multi_2: {
-		pattern: "foo/#bar/baz",
+		pattern: "foo/bar/#baz",
 		tests: ["foo/bar/baz", "foo/bar/fizz/baz", "foo/baz"]
 	},
 	complex_1: {
-		pattern: "foo/#bar/+baz",
+		pattern: "foo/+baz/#bar",
 		tests: ["foo/bar/baz", "foo/bar/baz/fizz", "foo/bar"]
 	}
 }
 
-Object.keys(tests).forEach(function (name) {
+Object.keys(tests).forEach(function(name) {
 	var test = tests[name];
 	var pattern = test.pattern;
 	var cases = test.tests;
 	console.log("Processing test", name, "\n");
 	var compiled = mqtt_regex(pattern);
-	console.log("Compiled", name, "to:", compiled.regex, "\n");
+	console.log("Compiled", pattern, "to:", compiled.regex, "\n");
 	console.log("Running test cases:");
-	cases.forEach(function (topic, index) {
+	cases.forEach(function(topic, index) {
 		console.log("Running #" + index + ":", topic);
 
 		var matches = compiled.regex.exec(topic);
