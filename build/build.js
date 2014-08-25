@@ -230,16 +230,28 @@ module.exports = parse;
 /**
  * Parses topic string with parameters
  * @param topic Topic string with optional params
- @ @returns {Object} Compiles a regex for matching topic strings, and generates function for getting params
+ @ @returns {Object} Compiles a regex for matching topics, getParams for getting params, and exec for doing both
  */
 function parse(topic) {
 	var tokens = tokenize(topic).map(process_token);
-
-	return {
+	var result = {
 		regex: make_regex(tokens),
-		getParams: make_pram_getter(tokens)
-	}
+		getParams: make_pram_getter(tokens),
+	};
+	result.exec = exec.bind(result);
+	return result;
 };
+
+/**
+ * Matches regex against topic, returns params if successful
+ * @param topic Topic to match
+ */
+function exec(topic) {
+	var regex = this.regex;
+	var getParams = this.getParams;
+	var match = regex.exec(topic);
+	if (match) return getParams(match);
+}
 
 // Split the topic into consumable tokens
 function tokenize(topic) {
@@ -249,10 +261,11 @@ function tokenize(topic) {
 // Processes token and determines if it's a `single`, `multi` or `raw` token
 // Each token contains the type, an optional parameter name, and a piece of the regex
 // The piece can have a different syntax for when it is last
-function process_token(token) {
-	if (token[0] === "+") return process_single(token);
-	else if (token[0] === "#") return process_multi(token);
-	else return process_raw(token);
+function process_token(token, index, tokens) {
+	var last = (index === (tokens.length - 1));
+	if (token[0] === "+") return process_single(token, last);
+	else if (token[0] === "#") return process_multi(token, last);
+	else return process_raw(token, last);
 }
 
 // Processes a token for single paths (prefixed with a +)
@@ -267,13 +280,14 @@ function process_single(token) {
 }
 
 // Processes a token for multiple paths (prefixed with a #)
-function process_multi(token) {
+function process_multi(token, last) {
+	if (!last) throw new Error("# wildcard must be at the end of the pattern");
 	var name = token.slice(1);
 	return {
 		type: "multi",
 		name: name,
-		piece: "((?:[\\d\\w]+/)+)",
-		last: "((?:[\\d\\w]+/?)+)"
+		piece: "((?:[\\d\\w]+/)*)",
+		last: "((?:[\\d\\w]+/?)*)"
 	}
 }
 
@@ -288,15 +302,18 @@ function process_raw(token) {
 
 // Generates the RegExp object from the tokens
 function make_regex(tokens) {
-	var str = tokens.reduce(function (res, token, index) {
-		return res + ((index == (tokens.length - 1)) ? token.last : token.piece);
-	}, "");
+	var str = tokens.reduce(function(res, token, index) {
+			var is_last = (index == (tokens.length - 1));
+			var before_multi = (index === (tokens.length - 2)) && (last(tokens).type == "multi");
+			return res + ((is_last || before_multi) ? token.last : token.piece);
+		},
+		"");
 	return new RegExp("^" + str + "$");
 }
 
 // Generates the function for getting the params object from the regex results
 function make_pram_getter(tokens) {
-	return function (results) {
+	return function(results) {
 		// Get only the capturing tokens
 		var capture_tokens = remove_raw(tokens);
 		var res = {};
@@ -305,7 +322,7 @@ function make_pram_getter(tokens) {
 		if (!results) return res;
 
 		// Remove the first item and iterate through the capture groups
-		results.slice(1).forEach(function (capture, index) {
+		results.slice(1).forEach(function(capture, index) {
 			// Retreive the token description for the capture group
 			var token = capture_tokens[index];
 			var param = capture;
@@ -329,7 +346,7 @@ function make_pram_getter(tokens) {
 
 // Removes any tokens of type `raw`
 function remove_raw(tokens) {
-	return tokens.filter(function (token) {
+	return tokens.filter(function(token) {
 		return (token.type !== "raw");
 	})
 }
@@ -343,6 +360,7 @@ function last(items) {
 function remove_last(items) {
 	return items.slice(0, items.length - 1);
 }
+
 });
 require.alias("mqtt-regex/index.js", "mqtt-regex/index.js");if (typeof exports == "object") {
   module.exports = require("mqtt-regex");
