@@ -33,11 +33,7 @@ With npm:
 
 	$ npm install --save mqtt-regex
 
-With component
-
-	$component install --save rangermauve/mqtt-regex
-
-Or you can grab `./build/build.js` for a UMD-compatible version
+You can grab `./build/build.js` for a UMD-compatible bundle (for use in script tags and the such)
 
 ## API
 The API is super simple and should be easy to integrate with any project
