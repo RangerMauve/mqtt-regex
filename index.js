@@ -22,6 +22,8 @@
 	SOFTWARE.
 */
 
+var escapeRegex = require('escape-string-regexp');
+
 module.exports = parse;
 
 /**
@@ -90,6 +92,7 @@ function process_multi(token, last) {
 
 // Processes a raw string for the path, no special logic is expected
 function process_raw(token) {
+	var token = escapeRegex(token);
 	return {
 		type: "raw",
 		piece: token + "/",
