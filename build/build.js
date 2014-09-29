@@ -23,6 +23,8 @@
 	SOFTWARE.
 */
 
+var escapeRegex = require('escape-string-regexp');
+
 module.exports = parse;
 
 /**
@@ -91,6 +93,7 @@ function process_multi(token, last) {
 
 // Processes a raw string for the path, no special logic is expected
 function process_raw(token) {
+	var token = escapeRegex(token);
 	return {
 		type: "raw",
 		piece: token + "/",
@@ -158,6 +161,19 @@ function last(items) {
 function remove_last(items) {
 	return items.slice(0, items.length - 1);
 }
+
+},{"escape-string-regexp":2}],2:[function(require,module,exports){
+'use strict';
+
+var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+
+module.exports = function (str) {
+	if (typeof str !== 'string') {
+		throw new TypeError('Expected a string');
+	}
+
+	return str.replace(matchOperatorsRe,  '\\$&');
+};
 
 },{}]},{},[1])(1)
 });
