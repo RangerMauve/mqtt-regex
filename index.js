@@ -27,13 +27,14 @@ module.exports = parse;
 /**
  * Parses topic string with parameters
  * @param topic Topic string with optional params
- @ @returns {Object} Compiles a regex for matching topics, getParams for getting params, and exec for doing both
+ * @returns {Object} Compiles a regex for matching topics, getParams for getting params, and exec for doing both
  */
 function parse(topic) {
 	var tokens = tokenize(topic).map(process_token);
 	var result = {
 		regex: make_regex(tokens),
 		getParams: make_pram_getter(tokens),
+		topic: make_clean_topic(tokens)
 	};
 	result.exec = exec.bind(result);
 	return result;
@@ -93,6 +94,15 @@ function process_raw(token) {
 		piece: token + "/",
 		last: token + "/?"
 	};
+}
+
+// Turn a topic pattern into a regular MQTT topic
+function make_clean_topic(tokens){
+	return tokens.map(function(token){
+		if(token.type === "raw") return token.piece;
+		else if(token.type === "single") return "+/";
+		return if(token.type === "multi") return "#/";
+	}).join("");
 }
 
 // Generates the RegExp object from the tokens

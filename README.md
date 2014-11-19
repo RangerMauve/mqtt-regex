@@ -28,15 +28,15 @@ if(params) {
 With bower:
 
 	$ bower install mqtt-regex
-	
+
 With npm:
 
 	$ npm install --save mqtt-regex
-	
+
 With component
 
 	$component install --save rangermauve/mqtt-regex
-	
+
 Or you can grab `./build/build.js` for a UMD-compatible version
 
 ## API
@@ -55,7 +55,8 @@ The return looks like
 	exec: function(topic){
 		// Performs regex.exec on topic
 		// If there was a match, parses parameters and returns result
-	}
+	},
+	topic: "Regular MQTT topic with the pattern stuff stripped out"
 }
 ```
 
