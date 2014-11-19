@@ -25,24 +25,12 @@ if(params && (params.path.indexOf("text") !== -1)) {
 
 ## Installing
 
-With bower:
-
-	$ bower install mqtt-regex
-
 With npm:
 
 	$ npm install --save mqtt-regex
-<<<<<<< HEAD
 
-With component
-
-	$component install --save rangermauve/mqtt-regex
-
-Or you can grab `./build/build.js` for a UMD-compatible version
-=======
-
-You can grab `./build/build.js` for a UMD-compatible bundle (for use in script tags and the such)
->>>>>>> 796a778566a31e02dce2d18e48abc73b44f8a7bd
+To use it in the browser, either compile a package with `node run build` or
+use [Browserify](http://browserify.org).
 
 ## API
 The API is super simple and should be easy to integrate with any project
