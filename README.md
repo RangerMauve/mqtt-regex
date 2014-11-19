@@ -8,7 +8,7 @@ Converts an MQTT topic with parameters into a regular expression.
 ``` javascript
 var mqtt_regex = require("mqtt-regex");
 
-var pattern = "chat/+id/+user/#path/text";
+var pattern = "chat/+id/+user/#path";
 
 var room_message_info = mqtt_regex(pattern).exec;
 
@@ -18,7 +18,7 @@ var message_content = "Hello, World!";
 
 var params = room_message_info(topic);
 
-if(params) {
+if(params && (params.path.indexOf("text") !== -1)) {
 	chat.getRoom(params.id).sendFrom(params.user, message_content)
 }
 ```
@@ -32,12 +32,17 @@ With bower:
 With npm:
 
 	$ npm install --save mqtt-regex
+<<<<<<< HEAD
 
 With component
 
 	$component install --save rangermauve/mqtt-regex
 
 Or you can grab `./build/build.js` for a UMD-compatible version
+=======
+
+You can grab `./build/build.js` for a UMD-compatible bundle (for use in script tags and the such)
+>>>>>>> 796a778566a31e02dce2d18e48abc73b44f8a7bd
 
 ## API
 The API is super simple and should be easy to integrate with any project
@@ -63,6 +68,7 @@ The return looks like
 ## How params work
 
 MQTT defines two types of "wildcards", one for matching a single section of the path (`+`), and one for zero or more sections of the path (`#`).
+Note that the `#` wildcard can only be used if it's at the end of the topic.
 This library was inspired by the syntax in the routers for Express and Sinatra, and an attempt was made to have this just as simple to use.
 
 ### Examples of topic patterns:
@@ -76,9 +82,9 @@ Here is some input/output that you can expect:
 	user/bob: {id:"bob", path: []}
 	user/bob/ishungry: {id: "bob", path: ["ishungry"]
 
-#### device/#/status/+name
+#### device/+/+/component/+type/#path
 Not all wildcards need to be associated with a parameter, and it could be useful to just use plain MQTT topics.
-In this example you might only care about the status of some part of a device, and are willing to ignore the rest of the path.
+In this example you might only care about the status of some part of a device, and are willing to ignore a part of the path.
 Here are some examples of what this might be used with:
 
-	device/deviceversion/deviceidhere/component/infrared/status/active: {name:active}
+	device/deviceversion/deviceidhere/component/infrared/status/active: {type:"infrared",path: ["status","active"]}
