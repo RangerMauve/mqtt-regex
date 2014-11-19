@@ -106,7 +106,8 @@ function make_clean_topic(tokens){
 	return tokens.map(function(token){
 		if(token.type === "raw") return token.piece;
 		else if(token.type === "single") return "+/";
-		return if(token.type === "multi") return "#/";
+		else if(token.type === "multi") return "#/";
+		else return ""; // Wat
 	}).join("");
 }
 
