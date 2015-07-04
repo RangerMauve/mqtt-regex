@@ -1,6 +1,6 @@
 {
   "name": "mqtt-regex",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Converts an MQTT topic with parameters into a regular expression.",
   "main": "index.js",
   "scripts": {
