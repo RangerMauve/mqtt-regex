@@ -104,7 +104,7 @@ function process_raw(token) {
 // Turn a topic pattern into a regular MQTT topic
 function make_clean_topic(tokens) {
 	return tokens.map(function (token) {
-		if (token.type === "raw") return token.piece.slice(1);
+		if (token.type === "raw") return token.piece.slice(0, -1);
 		else if (token.type === "single") return "+";
 		else if (token.type === "multi") return "#";
 		else return ""; // Wat
