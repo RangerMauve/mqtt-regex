@@ -102,18 +102,18 @@ function process_raw(token) {
 }
 
 // Turn a topic pattern into a regular MQTT topic
-function make_clean_topic(tokens){
-	return tokens.map(function(token){
-		if(token.type === "raw") return token.piece;
-		else if(token.type === "single") return "+/";
-		else if(token.type === "multi") return "#/";
+function make_clean_topic(tokens) {
+	return tokens.map(function (token) {
+		if (token.type === "raw") return token.piece.slice(1);
+		else if (token.type === "single") return "+";
+		else if (token.type === "multi") return "#";
 		else return ""; // Wat
-	}).join("");
+	}).join("/");
 }
 
 // Generates the RegExp object from the tokens
 function make_regex(tokens) {
-	var str = tokens.reduce(function(res, token, index) {
+	var str = tokens.reduce(function (res, token, index) {
 			var is_last = (index == (tokens.length - 1));
 			var before_multi = (index === (tokens.length - 2)) && (last(tokens).type == "multi");
 			return res + ((is_last || before_multi) ? token.last : token.piece);
@@ -124,7 +124,7 @@ function make_regex(tokens) {
 
 // Generates the function for getting the params object from the regex results
 function make_pram_getter(tokens) {
-	return function(results) {
+	return function (results) {
 		// Get only the capturing tokens
 		var capture_tokens = remove_raw(tokens);
 		var res = {};
@@ -133,7 +133,7 @@ function make_pram_getter(tokens) {
 		if (!results) return res;
 
 		// Remove the first item and iterate through the capture groups
-		results.slice(1).forEach(function(capture, index) {
+		results.slice(1).forEach(function (capture, index) {
 			// Retreive the token description for the capture group
 			var token = capture_tokens[index];
 			var param = capture;
@@ -157,7 +157,7 @@ function make_pram_getter(tokens) {
 
 // Removes any tokens of type `raw`
 function remove_raw(tokens) {
-	return tokens.filter(function(token) {
+	return tokens.filter(function (token) {
 		return (token.type !== "raw");
 	})
 }
