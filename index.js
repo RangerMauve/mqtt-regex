@@ -74,8 +74,8 @@ function process_single(token) {
 	return {
 		type: "single",
 		name: name,
-		piece: "([\\d\\w]+/)",
-		last: "([\\d\\w]+/?)"
+		piece: "([^/#+]+/)",
+		last: "([^/#+]+/?)"
 	};
 }
 
@@ -86,8 +86,8 @@ function process_multi(token, last) {
 	return {
 		type: "multi",
 		name: name,
-		piece: "((?:[\\d\\w]+/)*)",
-		last: "((?:[\\d\\w]+/?)*)"
+		piece: "((?:[^/#+]+/)*)",
+		last: "((?:[^/#+]+/?)*)"
 	}
 }
 
