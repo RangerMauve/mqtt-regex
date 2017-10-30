@@ -3,6 +3,8 @@ mqtt-regex
 
 Converts an MQTT topic with parameters into a regular expression.
 
+_Unless you need regex support, you should use [mqtt-pattern](https://www.npmjs.com/package/mqtt-pattern) which is faster_
+
 ## Example
 
 ``` javascript
