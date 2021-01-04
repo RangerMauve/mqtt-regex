@@ -36,11 +36,28 @@ function parse(topic) {
 	var result = {
 		regex: make_regex(tokens),
 		getParams: make_pram_getter(tokens),
-		topic: make_clean_topic(tokens)
+		topic: make_clean_topic(tokens),
+		format: make_formatter(topic)
 	};
 	result.exec = exec.bind(result);
 	return result;
 };
+
+function make_formatter(topic) {
+	function formatter(params) {
+		var tokens = tokenize(topic)
+		return tokens.map(function(token) {
+			if (token[0] == '+' || token[0] == '#') {
+				return params[token.slice(1)]
+			} else {
+				return token
+			}
+		}).flat().join('/')
+	}
+	return formatter
+
+}
+
 
 /**
  * Matches regex against topic, returns params if successful
