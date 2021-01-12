@@ -51,7 +51,11 @@ The return looks like
 		// Performs regex.exec on topic
 		// If there was a match, parses parameters and returns result
 	},
-	topic: "Regular MQTT topic with the pattern stuff stripped out"
+	topic: "Regular MQTT topic with the pattern stuff stripped out",
+	format: function(params){
+		// Generate a string with the params filled into the pattern
+		return "formatted/pattern/here
+	}
 }
 ```
 

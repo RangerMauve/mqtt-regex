@@ -47,8 +47,11 @@ function make_formatter(topic) {
 	function formatter(params) {
 		var tokens = tokenize(topic)
 		return tokens.map(function(token) {
-			if (token[0] == '+' || token[0] == '#') {
+			if (token[0] == '+') {
 				return params[token.slice(1)]
+			} else if(token[0] == '#') {
+				// If the param is an array, turn it into a path
+				return [].concat(params[token.slice(1)] || []).join('/')
 			} else {
 				return token
 			}
